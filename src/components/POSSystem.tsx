@@ -6,14 +6,21 @@ import { Cart } from "./Cart";
 import { Analytics } from "./Analytics";
 import { MenuManagement } from "./MenuManagement";
 import { AddItemModal } from "./AddItemModal";
-import { toast } from "sonner";
+import { Doc } from "../../convex/_generated/dataModel";
 
 type Tab = "menu" | "analytics" | "manage";
 
-export function POSSystem() {
+type UserWithRole = (Doc<"users"> & { role?: "admin" | "staff" }) | null;
+
+interface POSSystemProps {
+  currentUser: UserWithRole;
+}
+
+export function POSSystem({ currentUser }: POSSystemProps) {
   const [activeTab, setActiveTab] = useState<Tab>("menu");
   const [showAddItemModal, setShowAddItemModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const isAdmin = currentUser?.role === "admin";
   
   const menuItems = useQuery(api.menuItems.listForPOS);
   const cart = useQuery(api.transactions.getCurrentCart);
@@ -25,19 +32,25 @@ export function POSSystem() {
     const init = async () => {
       try {
         await initializeAddOns();
-      } catch (error) {
+      } catch {
         // Ignore error if already initialized
       }
 
       try {
         await initializeModifiers();
-      } catch (error) {
+      } catch {
         // Ignore error if already initialized
       }
     };
 
-    init();
+    void init();
   }, [initializeAddOns, initializeModifiers]);
+
+  useEffect(() => {
+    if (!isAdmin && activeTab === "manage") {
+      setActiveTab("menu");
+    }
+  }, [isAdmin, activeTab]);
 
   // Remove "Add-on" from categories and add dynamic "Promo" items
   const categories = ["All", "Coffee", "Non-Coffee", "Merch", "Consignment", "Bundle"];
@@ -54,16 +67,18 @@ export function POSSystem() {
     return item.category === selectedCategory;
   }) || [];
 
+  const tabs = [
+    { id: "menu", label: "Menu", icon: "🍽️" },
+    { id: "analytics", label: "Analytics", icon: "📊" },
+    ...(isAdmin ? [{ id: "manage", label: "Manage", icon: "⚙️" }] : []),
+  ] as const;
+
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       {/* Tab Navigation */}
       <div className="bg-white border-b px-4 py-2">
         <div className="flex space-x-1">
-          {[
-            { id: "menu", label: "Menu", icon: "🍽️" },
-            { id: "analytics", label: "Analytics", icon: "📊" },
-            { id: "manage", label: "Manage", icon: "⚙️" },
-          ].map((tab) => (
+          {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as Tab)}
@@ -112,7 +127,7 @@ export function POSSystem() {
 
         {activeTab === "analytics" && <Analytics />}
 
-        {activeTab === "manage" && (
+        {isAdmin && activeTab === "manage" && (
           <MenuManagement onAddItem={() => setShowAddItemModal(true)} />
         )}
       </div>
@@ -121,7 +136,7 @@ export function POSSystem() {
       {activeTab === "menu" && cart && cart.items.length > 0 && <Cart />}
 
       {/* Add Item Modal */}
-      {showAddItemModal && (
+      {isAdmin && showAddItemModal && (
         <AddItemModal onClose={() => setShowAddItemModal(false)} />
       )}
     </div>

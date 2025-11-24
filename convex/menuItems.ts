@@ -1,6 +1,24 @@
-import { query, mutation } from "./_generated/server";
+import { query, mutation, QueryCtx, MutationCtx } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
+
+async function requireAdmin(ctx: QueryCtx | MutationCtx) {
+  const userId = await getAuthUserId(ctx);
+  if (!userId) {
+    throw new Error("Not authenticated");
+  }
+
+  const roleDoc = await ctx.db
+    .query("userRoles")
+    .withIndex("by_userId", (q) => q.eq("userId", userId))
+    .unique();
+
+  if (roleDoc?.role !== "admin") {
+    throw new Error("Forbidden");
+  }
+
+  return userId;
+}
 
 const categoryValidator = v.union(
   v.literal("Coffee"),
@@ -115,10 +133,7 @@ export const create = mutation({
     itemModifierEligibility: v.optional(modifierEligibilityValidator),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) {
-      throw new Error("Not authenticated");
-    }
+    await requireAdmin(ctx);
 
     const { itemModifierEligibility, ...rest } = args;
     const eligibility = itemModifierEligibility ?? {
@@ -152,10 +167,7 @@ export const update = mutation({
     promoActive: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) {
-      throw new Error("Not authenticated");
-    }
+    await requireAdmin(ctx);
 
     const { id, ...updates } = args;
     await ctx.db.patch(id, updates);
@@ -176,10 +188,7 @@ export const bulkUpdate = mutation({
     }),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) {
-      throw new Error("Not authenticated");
-    }
+    await requireAdmin(ctx);
 
     for (const id of args.ids) {
       await ctx.db.patch(id, args.updates);
@@ -190,10 +199,7 @@ export const bulkUpdate = mutation({
 export const bulkDelete = mutation({
   args: { ids: v.array(v.id("menuItems")) },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) {
-      throw new Error("Not authenticated");
-    }
+    await requireAdmin(ctx);
 
     for (const id of args.ids) {
       await ctx.db.delete(id);
@@ -204,10 +210,7 @@ export const bulkDelete = mutation({
 export const remove = mutation({
   args: { id: v.id("menuItems") },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) {
-      throw new Error("Not authenticated");
-    }
+    await requireAdmin(ctx);
 
     await ctx.db.delete(args.id);
   },

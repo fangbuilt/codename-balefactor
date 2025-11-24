@@ -36,7 +36,7 @@ function Content() {
   return (
     <div className="flex flex-col">
       <Authenticated>
-        <POSSystem />
+        <POSSystem currentUser={loggedInUser} />
       </Authenticated>
       <Unauthenticated>
         <div className="flex items-center justify-center min-h-[50vh] p-8">

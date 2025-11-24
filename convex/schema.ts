@@ -55,6 +55,11 @@ const applicationTables = {
     sortOrder: v.number(),
   }).index("by_type_order", ["type", "sortOrder"]),
 
+  userRoles: defineTable({
+    userId: v.id("users"),
+    role: v.union(v.literal("admin"), v.literal("staff")),
+  }).index("by_userId", ["userId"]),
+
   transactions: defineTable({
     status: v.union(v.literal("draft"), v.literal("completed")),
     userId: v.id("users"),

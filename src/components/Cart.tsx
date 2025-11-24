@@ -28,6 +28,9 @@ export function Cart() {
     }).format(price);
   };
 
+  const openCartSheet = () => setIsOpen(true);
+  const closeCartSheet = () => setIsOpen(false);
+
   const handleQuantityChange = (itemIndex: number, newQuantity: number) => {
     updateQuantity({ itemIndex, quantity: newQuantity }).catch((error) => {
       toast.error("Failed to update quantity");
@@ -76,6 +79,7 @@ export function Cart() {
       toast.success("Transaction discount applied");
       setShowDiscountModal(false);
       setDiscountForm({ type: "percentage", value: "" });
+      openCartSheet();
     }).catch((error) => {
       toast.error("Failed to apply discount");
       console.error(error);
@@ -226,7 +230,10 @@ export function Cart() {
               {/* Transaction Discount Button */}
               {!cart.transactionDiscount && (
                 <button
-                  onClick={() => setShowDiscountModal(true)}
+                  onClick={() => {
+                    closeCartSheet();
+                    setShowDiscountModal(true);
+                  }}
                   className="w-full bg-orange-500 text-white py-2 rounded-lg font-semibold hover:bg-orange-600 transition-colors"
                 >
                   Apply Transaction Discount
@@ -236,13 +243,19 @@ export function Cart() {
               {/* Action Buttons */}
               <div className="flex space-x-3 pt-3">
                 <button
-                  onClick={() => setShowClearConfirm(true)}
+                  onClick={() => {
+                    closeCartSheet();
+                    setShowClearConfirm(true);
+                  }}
                   className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
                 >
                   Clear Cart
                 </button>
                 <button
-                  onClick={() => setShowCheckoutConfirm(true)}
+                  onClick={() => {
+                    closeCartSheet();
+                    setShowCheckoutConfirm(true);
+                  }}
                   className="flex-1 bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors"
                 >
                   Checkout
@@ -292,7 +305,10 @@ export function Cart() {
 
             <div className="flex space-x-3 mt-6">
               <button
-                onClick={() => setShowDiscountModal(false)}
+                onClick={() => {
+                  setShowDiscountModal(false);
+                  openCartSheet();
+                }}
                 className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-semibold"
               >
                 Cancel
@@ -318,7 +334,10 @@ export function Cart() {
             </p>
             <div className="flex space-x-3">
               <button
-                onClick={() => setShowClearConfirm(false)}
+                onClick={() => {
+                  setShowClearConfirm(false);
+                  openCartSheet();
+                }}
                 className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-semibold"
               >
                 Cancel
@@ -347,7 +366,10 @@ export function Cart() {
             </p>
             <div className="flex space-x-3">
               <button
-                onClick={() => setShowCheckoutConfirm(false)}
+                onClick={() => {
+                  setShowCheckoutConfirm(false);
+                  openCartSheet();
+                }}
                 className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-semibold"
               >
                 Cancel

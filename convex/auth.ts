@@ -17,6 +17,14 @@ export const loggedInUser = query({
     if (!user) {
       return null;
     }
-    return user;
+    const roleDoc = await ctx.db
+      .query("userRoles")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .unique();
+
+    return {
+      ...user,
+      role: roleDoc?.role ?? "staff",
+    };
   },
 });
