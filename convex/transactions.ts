@@ -1,6 +1,7 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { paginationOptsValidator } from "convex/server";
 
 const modifierSelectionValidator = v.object({
   temperature: v.optional(v.id("itemModifiers")),
@@ -147,7 +148,7 @@ export const addToCart = mutation({
     const itemTotal = (basePrice + addOnTotal) * args.quantity;
 
     // Get or create cart
-    let cart = await ctx.db
+    const cart = await ctx.db
       .query("transactions")
       .withIndex("by_user_status", (q) => q.eq("userId", userId).eq("status", "draft"))
       .unique();
@@ -429,6 +430,36 @@ export const getCompletedTransactions = query({
     }
 
     return populatedTransactions;
+  },
+});
+
+export const getTransactionsByDateRange = query({
+  args: {
+    startDate: v.optional(v.number()),
+    endDate: v.optional(v.number()),
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw new Error("Not authenticated");
+    }
+
+    let transactionsQuery = ctx.db
+      .query("transactions")
+      .withIndex("by_status", (q) => q.eq("status", "completed"))
+      .order("desc");
+
+    if (args.startDate && args.endDate) {
+      transactionsQuery = transactionsQuery.filter((q) =>
+        q.and(
+          q.gte(q.field("_creationTime"), args.startDate!),
+          q.lte(q.field("_creationTime"), args.endDate!)
+        )
+      );
+    }
+
+    return transactionsQuery.paginate(args.paginationOpts);
   },
 });
 

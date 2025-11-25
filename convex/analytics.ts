@@ -137,3 +137,37 @@ export const getMenuItemRanking = query({
       .sort((a, b) => b.quantity - a.quantity);
   },
 });
+
+export const getSalesTotalForDateRange = query({
+  args: {
+    startDate: v.optional(v.number()),
+    endDate: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw new Error("Not authenticated");
+    }
+
+    let transactionsQuery = ctx.db
+      .query("transactions")
+      .withIndex("by_status", (q) => q.eq("status", "completed"));
+
+    if (args.startDate && args.endDate) {
+      transactionsQuery = transactionsQuery.filter((q) =>
+        q.and(
+          q.gte(q.field("_creationTime"), args.startDate!),
+          q.lte(q.field("_creationTime"), args.endDate!)
+        )
+      );
+    }
+
+    const transactions = await transactionsQuery.collect();
+    const totalSales = transactions.reduce((sum, transaction) => sum + transaction.total, 0);
+
+    return {
+      totalSales,
+      transactionCount: transactions.length,
+    };
+  },
+});
