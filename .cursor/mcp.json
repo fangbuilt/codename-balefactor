@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": [
+        "shadcn@latest",
+        "mcp"
+      ]
+    },
+    "convex": {
+      "command": "npx -y convex@latest mcp start",
+      "env": {},
+      "args": []
+    }
+  }
+}

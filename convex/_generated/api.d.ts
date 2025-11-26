@@ -19,6 +19,8 @@ import type * as auth from "../auth.js";
 import type * as http from "../http.js";
 import type * as itemModifiers from "../itemModifiers.js";
 import type * as menuItems from "../menuItems.js";
+import type * as resendOTP from "../resendOTP.js";
+import type * as resendOTPPasswordReset from "../resendOTPPasswordReset.js";
 import type * as router from "../router.js";
 import type * as transactions from "../transactions.js";
 
@@ -37,6 +39,8 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   itemModifiers: typeof itemModifiers;
   menuItems: typeof menuItems;
+  resendOTP: typeof resendOTP;
+  resendOTPPasswordReset: typeof resendOTPPasswordReset;
   router: typeof router;
   transactions: typeof transactions;
 }>;
