@@ -19,16 +19,27 @@ export const ResendOTP = Email({
     return generateRandomString(random, alphabet, length);
   },
   async sendVerificationRequest({ identifier, provider, token }: { identifier: string; provider: { apiKey?: string }; token: string }) {
+    
+    console.log("1 FROM:", provider);
+
     if (!provider.apiKey) {
       throw new Error("Resend API key is not configured");
     }
+
+    console.log("2 FROM:", provider);
+
     const resend = new ResendAPI(provider.apiKey);
+
+    console.log("3 FROM:", provider);
+
     const { error } = await resend.emails.send({
       from: "Cafe Lab <mailbot@i3lcafelab.biz.id>",
       to: [identifier],
       subject: `Sign in to Cafe Lab`,
       text: `Your verification code is: ${token}\n\nThis code will expire in 15 minutes.`,
     });
+
+    console.log("4 FROM:", provider);
 
     if (error) {
       throw new Error(JSON.stringify(error));
