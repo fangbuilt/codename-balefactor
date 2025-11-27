@@ -5,6 +5,7 @@ import { RandomReader, generateRandomString } from "@oslojs/crypto/random";
 export const ResendOTPPasswordReset = Resend({
   id: "resend-otp-password-reset",
   apiKey: process.env.AUTH_RESEND_KEY,
+  from: "Cafe Lab <mailbot@i3lcafelab.biz.id>",
   async generateVerificationToken() {
     const random: RandomReader = {
       read(bytes) {

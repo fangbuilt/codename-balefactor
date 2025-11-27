@@ -5,6 +5,7 @@ import { RandomReader, generateRandomString } from "@oslojs/crypto/random";
 export const ResendOTP = Email({
   id: "resend-otp",
   apiKey: process.env.AUTH_RESEND_KEY,
+  from: "Cafe Lab <mailbot@i3lcafelab.biz.id>",
   maxAge: 60 * 15, // 15 minutes
   async generateVerificationToken() {
     const random: RandomReader = {
