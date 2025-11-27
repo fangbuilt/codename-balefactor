@@ -19,7 +19,7 @@ export const ResendOTPPasswordReset = Resend({
   async sendVerificationRequest({ identifier: email, provider, token }) {
     const resend = new ResendAPI(provider.apiKey);
     const { error } = await resend.emails.send({
-      from: "Cafe Lab <dmarc@i3lcafelab.biz.id>",
+      from: "Cafe Lab <mailbot@i3lcafelab.biz.id>",
       to: [email],
       subject: `Reset your password in Cafe Lab`,
       text: `Your password reset code is: ${token}\n\nThis code will expire in 15 minutes.\n\nIf you didn't request this, please ignore this email.`,

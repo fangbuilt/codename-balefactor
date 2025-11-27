@@ -23,7 +23,7 @@ export const ResendOTP = Email({
     }
     const resend = new ResendAPI(provider.apiKey);
     const { error } = await resend.emails.send({
-      from: "Cafe Lab <dmarc@i3lcafelab.biz.id>",
+      from: "Cafe Lab <mailbot@i3lcafelab.biz.id>",
       to: [identifier],
       subject: `Sign in to Cafe Lab`,
       text: `Your verification code is: ${token}\n\nThis code will expire in 15 minutes.`,
