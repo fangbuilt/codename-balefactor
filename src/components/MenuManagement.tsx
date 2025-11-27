@@ -71,7 +71,7 @@ export function MenuManagement({ onAddItem }: MenuManagementProps) {
     }
   };
 
-  const categories = ["All", "Coffee", "Non-Coffee", "Merch", "Promo", "Add-on", "Consignment", "Bundle"];
+  const categories = ["All", "Coffee", "Non-Coffee", "Merch", "Consignment", "Bundle"];
   const statusOptions = ["All", "Active", "Inactive"];
 
   const filteredItems = menuItems?.filter(item => {

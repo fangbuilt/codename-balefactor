@@ -1,0 +1,12 @@
+---
+description: Enforce a component-based or feature-based directory structure for React/TypeScript projects
+globs: ["src/**/*.tsx", "src/**/*.ts"]
+---
+# React/TypeScript Project Structure Guidelines
+
+Adopt a consistent, component-based file structure.
+
+*   **Components**: Place related files (component, styles, tests) within a dedicated directory:
+    `src/components/Button/Button.tsx`, `src/components/Button/Button.styles.ts`, etc.
+*   **Pages/Screens**: Use a similar structure for major views.
+*   **Separation of Concerns**: Utilize `services/`, `utils/`, and `types/` directories for non-component logic, helper functions, and type definitions.

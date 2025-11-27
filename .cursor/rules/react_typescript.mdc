@@ -1,0 +1,12 @@
+---
+description: Guidelines for modern React development with TypeScript
+globs: ["src/**/*.tsx"]
+---
+# Modern React and TypeScript Best Practices
+
+*   **Functional Components**: Always use functional components with hooks (e.g., `useState`, `useEffect`) instead of class components.
+*   **Custom Hooks**: Abstract reusable logic into custom hooks.
+*   **Type Safety**: Use TypeScript interfaces and types explicitly for props and state. Avoid `any`.
+*   **Performance**: Use `React.memo` for performance optimization when necessary.
+*   **Prop Validation**: Rely on TypeScript for type checking props, rather than `PropTypes`.
+*   **Styling**: Prefer Tailwind CSS utility classes or CSS modules for styling.
