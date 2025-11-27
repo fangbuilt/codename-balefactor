@@ -523,7 +523,7 @@ export function SignInForm() {
 
       {/* Google OAuth */}
       <button
-        className="auth-button flex items-center justify-center gap-2 bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 shadow-sm hover:shadow transition-all"
+        className="auth-button flex items-center justify-center gap-2 !bg-white !border-2 !border-gray-300 !text-gray-700 hover:!bg-gray-50 hover:!border-gray-400 !shadow-sm hover:!shadow transition-all"
         onClick={() => {
           void handleGoogleSignIn();
         }}
