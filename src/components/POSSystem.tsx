@@ -53,7 +53,7 @@ export function POSSystem({ currentUser }: POSSystemProps) {
   }, [isAdmin, activeTab]);
 
   // Remove "Add-on" from categories and add dynamic "Promo" items
-  const categories = ["All", "Coffee", "Non-Coffee", "Merch", "Consignment", "Bundle"];
+  const categories = ["All", "Coffee", "Non-Coffee", "Bottled", "Merch", "Consignment", "Bundle"];
   
   // Add "Promo" category if there are items with active promos
   const hasPromoItems = menuItems?.some(item => item.hasActivePromo) || false;
