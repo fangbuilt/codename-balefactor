@@ -23,9 +23,9 @@ async function requireAdmin(ctx: QueryCtx | MutationCtx) {
 const categoryValidator = v.union(
   v.literal("Coffee"),
   v.literal("Non-Coffee"),
+  v.literal("Bottled"),
   v.literal("Merch"),
   v.literal("Promo"),
-  v.literal("Add-on"),
   v.literal("Consignment"),
   v.literal("Bundle")
 );
