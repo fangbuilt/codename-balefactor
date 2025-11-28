@@ -21,7 +21,7 @@ export function AddItemModal({ onClose }: AddItemModalProps) {
   const createItem = useMutation(api.menuItems.create);
   const itemModifiers = useQuery(api.itemModifiers.list);
 
-  const categories = ["Coffee", "Non-Coffee", "Merch", "Promo", "Add-on", "Consignment", "Bundle"];
+  const categories = ["Coffee", "Non-Coffee", "Merch", "Bottled", "Promo", "Consignment", "Bundle"];
   const addOnOptions = [
     { value: "coffee-only", label: "Coffee-only (Extra Shot only)" },
     { value: "coffee-based", label: "Coffee-based (Extra Shot + Oat Milk)" },
