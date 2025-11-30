@@ -9,11 +9,13 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "convex": "^1.29.3",
     "next": "16.0.5",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
   "devDependencies": {
+    "@convex-dev/eslint-plugin": "^1.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -21,5 +23,6 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.5",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "pnpm@10.24.0+sha512.01ff8ae71b4419903b65c60fb2dc9d34cf8bb6e06d03bde112ef38f7a34d6904c424ba66bea5cdcf12890230bf39f9580473140ed9c946fef328b6e5238a345a"
 }
